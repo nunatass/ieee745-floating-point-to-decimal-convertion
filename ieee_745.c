@@ -26,7 +26,7 @@ int main(int argc, const char *argv[]) {
     exponent =  exponent -127;
    
     //get the abstract mantissa
-    int mantissaAbstract = hexNumber & GeTMANTISSA;
+    int mantissaAbstract = hexNumber & GETMANTISSA;
 
     // aux to get the active or not active bit
     int getBitFromMantissaAbstract  =  0x00400000;
