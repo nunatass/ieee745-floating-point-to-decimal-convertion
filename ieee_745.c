@@ -43,6 +43,8 @@ int main(int argc, const char *argv[]) {
 
     decNumber = pow(2, exponent) * mantissa;
     decNumber = (sign == 0) ? decNumber: (-1*decNumber);
+    
+    printf("%f\n", decNumber);
 
 
     //printf("%ld\n", strtol(argv[1], NULL, 16));
