@@ -4,7 +4,7 @@
 
 #define GETSIGNAL 0x80000000
 #define GETEXPONENT 0x7f800000
-#define GeTMANTISSA 0x007fffff
+#define GETMANTISSA 0x007fffff
 
 int main(int argc, const char *argv[]) {
 
