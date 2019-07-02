@@ -10,14 +10,14 @@ int main(int argc, const char *argv[]) {
 
 
     int hexNumber =  strtol(argv[1], NULL, 16);
-    float mantissa = 1;
+    float mantissa = 0;
     unsigned int sign = 0; 
     unsigned int exponent = 0;
     float decNumber = 0;
 
     //getting the sign
     sign =  hexNumber & GETSIGNAL;
-    sign = sign >> 31;
+    //sign = sign >> 31;
   
     // getting the exponent
     exponent =  hexNumber & GETEXPONENT;
@@ -25,7 +25,7 @@ int main(int argc, const char *argv[]) {
     exponent = exponent >> 24;
     exponent =  exponent -127;
    
-    //get the abstract mantissa
+    //get the abgstract mantissa
     int mantissaAbstract = hexNumber & GETMANTISSA;
 
     // aux to get the active or not active bit
@@ -39,15 +39,37 @@ int main(int argc, const char *argv[]) {
      
    }
 
-   // condição ? codigoUm : codigoDois;
-
-    decNumber = pow(2, exponent) * mantissa;
-    decNumber = (sign == 0) ? decNumber: (-1*decNumber);
-    
-    printf("%f\n", decNumber);
-
 
     //printf("%ld\n", strtol(argv[1], NULL, 16));
-  
+    
+
+     if(exponent == 128 && mantissa > 0) {
+      
+      printf("NaN\n");
+    
+    }else if(exponent == 128 && mantissa == 0 && sign == 0) {
+      printf("INF\n");
+      
+    }else if (exponent == 128 && mantissa == 0 && sign != 0) {
+      printf("-INF\n");
+      
+    }else {
+      mantissa = mantissa + 1;
+      decNumber = pow(2, exponent) * mantissa;
+      decNumber = (sign == 0) ? decNumber: (-1*decNumber);
+
+      
+      if (abs(decNumber) <= 0.1 ) {
+        printf("0 [não tem muita precisão para número muito pequeno!]");
+      }
+
+
+
+      printf("%f\n", decNumber);
+
+
+    }
+
+
   return 0;
 }
