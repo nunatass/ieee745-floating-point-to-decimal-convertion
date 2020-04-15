@@ -1,15 +1,15 @@
 	.section	__TEXT,__text,regular,pure_instructions
-	.build_version macos, 10, 14	sdk_version 10, 14
-	.section	__TEXT,__literal4,4byte_literals
-	.p2align	2               ## -- Begin function main
+	.build_version macos, 10, 15	sdk_version 10, 15, 4
+	.section	__TEXT,__literal8,8byte_literals
+	.p2align	3               ## -- Begin function main
 LCPI0_0:
-	.long	1065353216              ## float 1
+	.quad	4611686018427387904     ## double 2
+LCPI0_1:
+	.quad	4607182418800017408     ## double 1
+	.section	__TEXT,__literal4,4byte_literals
+	.p2align	2
 LCPI0_2:
 	.long	3212836864              ## float -1
-	.section	__TEXT,__literal8,8byte_literals
-	.p2align	3
-LCPI0_1:
-	.quad	4611686018427387904     ## double 2
 	.section	__TEXT,__text,regular,pure_instructions
 	.globl	_main
 	.p2align	4, 0x90
@@ -21,129 +21,190 @@ _main:                                  ## @main
 	.cfi_offset %rbp, -16
 	movq	%rsp, %rbp
 	.cfi_def_cfa_register %rbp
-	subq	$80, %rsp
-	xorl	%eax, %eax
-	movl	%eax, %ecx
+	subq	$96, %rsp
 	movl	$0, -4(%rbp)
 	movl	%edi, -8(%rbp)
 	movq	%rsi, -16(%rbp)
-	movq	-16(%rbp), %rsi
-	movq	8(%rsi), %rdi
-	movq	%rcx, %rsi
+	movq	-16(%rbp), %rax
+	cmpq	$0, 8(%rax)
+	jne	LBB0_2
+## %bb.1:
+	xorl	%edi, %edi
+	callq	_exit
+LBB0_2:
+	xorl	%eax, %eax
+	movl	%eax, %esi
+	movq	-16(%rbp), %rcx
+	movq	8(%rcx), %rdi
 	movl	$16, %edx
 	callq	_strtol
-	movss	LCPI0_0(%rip), %xmm0    ## xmm0 = mem[0],zero,zero,zero
-	movl	%eax, %edx
-	movl	%edx, -20(%rbp)
-	movss	%xmm0, -24(%rbp)
-	movl	$0, -28(%rbp)
-	movl	$0, -32(%rbp)
+                                        ## kill: def $eax killed $eax killed $rax
+	movl	%eax, -20(%rbp)
 	xorps	%xmm0, %xmm0
-	movss	%xmm0, -36(%rbp)
-	movl	-20(%rbp), %edx
-	andl	$-2147483648, %edx      ## imm = 0x80000000
-	movl	%edx, -28(%rbp)
-	movl	-28(%rbp), %edx
-	shrl	$31, %edx
-	movl	%edx, -28(%rbp)
-	movl	-20(%rbp), %edx
-	andl	$2139095040, %edx       ## imm = 0x7F800000
-	movl	%edx, -32(%rbp)
-	movl	-32(%rbp), %edx
-	shll	$1, %edx
-	movl	%edx, -32(%rbp)
-	movl	-32(%rbp), %edx
-	shrl	$24, %edx
-	movl	%edx, -32(%rbp)
-	movl	-32(%rbp), %edx
-	subl	$127, %edx
-	movl	%edx, -32(%rbp)
-	movl	-20(%rbp), %edx
-	andl	$8388607, %edx          ## imm = 0x7FFFFF
-	movl	%edx, -40(%rbp)
-	movl	$4194304, -44(%rbp)     ## imm = 0x400000
-	movl	$1, -48(%rbp)
-LBB0_1:                                 ## =>This Inner Loop Header: Depth=1
-	cmpl	$23, -48(%rbp)
-	jg	LBB0_4
-## %bb.2:                               ##   in Loop: Header=BB0_1 Depth=1
+	movsd	%xmm0, -32(%rbp)
+	movl	$0, -36(%rbp)
+	movl	$0, -40(%rbp)
+	xorps	%xmm0, %xmm0
+	movss	%xmm0, -44(%rbp)
+	movl	-20(%rbp), %eax
+	andl	$-2147483648, %eax      ## imm = 0x80000000
+	movl	%eax, -36(%rbp)
+	movl	-20(%rbp), %eax
+	andl	$2139095040, %eax       ## imm = 0x7F800000
+	movl	%eax, -40(%rbp)
 	movl	-40(%rbp), %eax
-	andl	-44(%rbp), %eax
-	movl	%eax, -52(%rbp)
-	movl	-52(%rbp), %eax
+	shll	$1, %eax
+	movl	%eax, -40(%rbp)
+	movl	-40(%rbp), %eax
+	shrl	$24, %eax
+	movl	%eax, -40(%rbp)
+	movl	-40(%rbp), %eax
+	subl	$127, %eax
+	movl	%eax, -40(%rbp)
+	movl	-20(%rbp), %eax
+	andl	$8388607, %eax          ## imm = 0x7FFFFF
+	movl	%eax, -48(%rbp)
+	movl	$4194304, -52(%rbp)     ## imm = 0x400000
+	movl	$1, -56(%rbp)
+LBB0_3:                                 ## =>This Inner Loop Header: Depth=1
+	cmpl	$23, -56(%rbp)
+	jg	LBB0_6
+## %bb.4:                               ##   in Loop: Header=BB0_3 Depth=1
+	movl	-48(%rbp), %eax
+	andl	-52(%rbp), %eax
+	movl	%eax, -60(%rbp)
+	movl	-60(%rbp), %eax
 	movl	$23, %ecx
-	subl	-48(%rbp), %ecx
+	subl	-56(%rbp), %ecx
                                         ## kill: def $cl killed $ecx
 	sarl	%cl, %eax
-	movl	%eax, -52(%rbp)
-	movl	-44(%rbp), %eax
-	sarl	$1, %eax
-	movl	%eax, -44(%rbp)
-	movss	-24(%rbp), %xmm0        ## xmm0 = mem[0],zero,zero,zero
-	cvtss2sd	%xmm0, %xmm0
+	movl	%eax, -60(%rbp)
 	movl	-52(%rbp), %eax
-	cvtsi2sdl	%eax, %xmm1
-	imull	$4294967295, -48(%rbp), %eax ## imm = 0xFFFFFFFF
-	cvtsi2sdl	%eax, %xmm2
-	movsd	LCPI0_1(%rip), %xmm3    ## xmm3 = mem[0],zero
-	movsd	%xmm0, -64(%rbp)        ## 8-byte Spill
+	sarl	$1, %eax
+	movl	%eax, -52(%rbp)
+	movsd	-32(%rbp), %xmm0        ## xmm0 = mem[0],zero
+	cvtsi2sdl	-60(%rbp), %xmm1
+	imull	$4294967295, -56(%rbp), %eax ## imm = 0xFFFFFFFF
+	cvtsi2sd	%eax, %xmm2
+	movsd	LCPI0_0(%rip), %xmm3    ## xmm3 = mem[0],zero
+	movsd	%xmm0, -72(%rbp)        ## 8-byte Spill
 	movaps	%xmm3, %xmm0
-	movsd	%xmm1, -72(%rbp)        ## 8-byte Spill
+	movsd	%xmm1, -80(%rbp)        ## 8-byte Spill
 	movaps	%xmm2, %xmm1
 	callq	_pow
-	movsd	-72(%rbp), %xmm1        ## 8-byte Reload
+	movsd	-80(%rbp), %xmm1        ## 8-byte Reload
                                         ## xmm1 = mem[0],zero
 	mulsd	%xmm0, %xmm1
-	movsd	-64(%rbp), %xmm0        ## 8-byte Reload
+	movsd	-72(%rbp), %xmm0        ## 8-byte Reload
                                         ## xmm0 = mem[0],zero
 	addsd	%xmm1, %xmm0
-	cvtsd2ss	%xmm0, %xmm0
-	movss	%xmm0, -24(%rbp)
-## %bb.3:                               ##   in Loop: Header=BB0_1 Depth=1
-	movl	-48(%rbp), %eax
+	movsd	%xmm0, -32(%rbp)
+## %bb.5:                               ##   in Loop: Header=BB0_3 Depth=1
+	movl	-56(%rbp), %eax
 	addl	$1, %eax
-	movl	%eax, -48(%rbp)
-	jmp	LBB0_1
-LBB0_4:
-	movl	-32(%rbp), %eax
-	movl	%eax, %ecx
-	cvtsi2sdq	%rcx, %xmm1
-	movsd	LCPI0_1(%rip), %xmm0    ## xmm0 = mem[0],zero
-	callq	_pow
-	movss	-24(%rbp), %xmm1        ## xmm1 = mem[0],zero,zero,zero
-	cvtss2sd	%xmm1, %xmm1
-	mulsd	%xmm1, %xmm0
-	cvtsd2ss	%xmm0, %xmm0
-	movss	%xmm0, -36(%rbp)
-	cmpl	$0, -28(%rbp)
-	jne	LBB0_6
-## %bb.5:
-	movss	-36(%rbp), %xmm0        ## xmm0 = mem[0],zero,zero,zero
-	movss	%xmm0, -76(%rbp)        ## 4-byte Spill
-	jmp	LBB0_7
+	movl	%eax, -56(%rbp)
+	jmp	LBB0_3
 LBB0_6:
-	movss	LCPI0_2(%rip), %xmm0    ## xmm0 = mem[0],zero,zero,zero
-	mulss	-36(%rbp), %xmm0
-	movss	%xmm0, -76(%rbp)        ## 4-byte Spill
-LBB0_7:
-	movss	-76(%rbp), %xmm0        ## 4-byte Reload
-                                        ## xmm0 = mem[0],zero,zero,zero
-	movss	%xmm0, -36(%rbp)
-	movss	-36(%rbp), %xmm0        ## xmm0 = mem[0],zero,zero,zero
-	cvtss2sd	%xmm0, %xmm0
+	cmpl	$128, -40(%rbp)
+	jne	LBB0_9
+## %bb.7:
+	movsd	-32(%rbp), %xmm0        ## xmm0 = mem[0],zero
+	xorps	%xmm1, %xmm1
+	ucomisd	%xmm1, %xmm0
+	jbe	LBB0_9
+## %bb.8:
 	leaq	L_.str(%rip), %rdi
+	movb	$0, %al
+	callq	_printf
+	jmp	LBB0_23
+LBB0_9:
+	cmpl	$128, -40(%rbp)
+	jne	LBB0_13
+## %bb.10:
+	movsd	-32(%rbp), %xmm0        ## xmm0 = mem[0],zero
+	xorps	%xmm1, %xmm1
+	ucomisd	%xmm1, %xmm0
+	jne	LBB0_13
+	jp	LBB0_13
+## %bb.11:
+	cmpl	$0, -36(%rbp)
+	jne	LBB0_13
+## %bb.12:
+	leaq	L_.str.1(%rip), %rdi
+	movb	$0, %al
+	callq	_printf
+	jmp	LBB0_22
+LBB0_13:
+	cmpl	$128, -40(%rbp)
+	jne	LBB0_17
+## %bb.14:
+	movsd	-32(%rbp), %xmm0        ## xmm0 = mem[0],zero
+	xorps	%xmm1, %xmm1
+	ucomisd	%xmm1, %xmm0
+	jne	LBB0_17
+	jp	LBB0_17
+## %bb.15:
+	cmpl	$0, -36(%rbp)
+	je	LBB0_17
+## %bb.16:
+	leaq	L_.str.2(%rip), %rdi
+	movb	$0, %al
+	callq	_printf
+	jmp	LBB0_21
+LBB0_17:
+	movsd	-32(%rbp), %xmm0        ## xmm0 = mem[0],zero
+	movsd	LCPI0_1(%rip), %xmm1    ## xmm1 = mem[0],zero
+	addsd	%xmm1, %xmm0
+	movsd	%xmm0, -32(%rbp)
+	movl	-40(%rbp), %eax
+	movl	%eax, %ecx
+	cvtsi2sd	%rcx, %xmm1
+	movsd	LCPI0_0(%rip), %xmm0    ## xmm0 = mem[0],zero
+	callq	_pow
+	mulsd	-32(%rbp), %xmm0
+	cvtsd2ss	%xmm0, %xmm0
+	movss	%xmm0, -44(%rbp)
+	movss	-44(%rbp), %xmm0        ## xmm0 = mem[0],zero,zero,zero
+	cvtss2sd	%xmm0, %xmm0
+	leaq	L_.str.3(%rip), %rdi
 	movb	$1, %al
 	callq	_printf
-	xorl	%ecx, %ecx
-	movl	%eax, -80(%rbp)         ## 4-byte Spill
-	movl	%ecx, %eax
-	addq	$80, %rsp
+	cmpl	$0, -36(%rbp)
+	jne	LBB0_19
+## %bb.18:
+	movss	-44(%rbp), %xmm0        ## xmm0 = mem[0],zero,zero,zero
+	movss	%xmm0, -84(%rbp)        ## 4-byte Spill
+	jmp	LBB0_20
+LBB0_19:
+	movss	LCPI0_2(%rip), %xmm0    ## xmm0 = mem[0],zero,zero,zero
+	mulss	-44(%rbp), %xmm0
+	movss	%xmm0, -84(%rbp)        ## 4-byte Spill
+LBB0_20:
+	movss	-84(%rbp), %xmm0        ## 4-byte Reload
+                                        ## xmm0 = mem[0],zero,zero,zero
+	movss	%xmm0, -44(%rbp)
+LBB0_21:
+	jmp	LBB0_22
+LBB0_22:
+	jmp	LBB0_23
+LBB0_23:
+	xorl	%eax, %eax
+	addq	$96, %rsp
 	popq	%rbp
 	retq
 	.cfi_endproc
                                         ## -- End function
 	.section	__TEXT,__cstring,cstring_literals
 L_.str:                                 ## @.str
+	.asciz	"NaN\n"
+
+L_.str.1:                               ## @.str.1
+	.asciz	"INF\n"
+
+L_.str.2:                               ## @.str.2
+	.asciz	"-INF\n"
+
+L_.str.3:                               ## @.str.3
 	.asciz	"%f\n"
 
 
