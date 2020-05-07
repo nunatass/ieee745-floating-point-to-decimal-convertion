@@ -1,2 +1,2 @@
 # ieee745-floating-point-to-decimal-conversion
-ieee745 floating point to decimal conversion
+ieee754 floating point to decimal conversion
